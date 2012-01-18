@@ -6,9 +6,11 @@
 ;; ((A A A A) (B) (C C) (A A) (D) (E E E E))
 
 (defn my-pack
-  [[f & r :as coll] prev tmp acc]
-  (cond (empty? coll) (seq (conj acc (seq tmp)))
-        (= prev f) (my-pack r f (conj tmp f) acc)
-        (not (= prev f)) (my-pack r f (conj [] f) (conj acc (seq tmp)))))
+  ([[f & r :as coll] prev tmp acc]
+     (cond (empty? coll)    (seq (conj acc (seq tmp)))
+           (= prev f)       (my-pack r f (conj tmp f) acc)
+           (not (= prev f)) (my-pack r f (conj [] f) (conj acc (seq tmp)))))
+  ([coll]
+     (my-pack coll (first coll) [] [])))
         
 

@@ -5,10 +5,15 @@
 ;; * (encode '(a a a a b c c a a d e e e e))
 ;; ((4 A) (1 B) (2 C) (2 A) (1 D)(4 E))
 
+(defn- pack
+  [cnt x]
+  (list cnt x))
+
 (defn encode
   ([[f & r :as coll] prev cnt acc]
-     (cond (empty? coll)    (seq (conj acc (list cnt prev)))
-           (= prev f)       (encode r f (inc cnt) acc)
-           (not (= prev f)) (encode r f 1 (conj acc (list cnt prev)))))
+     (cond (empty? coll)    (seq (conj acc (pack cnt prev)))
+           (= prev f)       (encode-mod r f (inc cnt) acc)
+           :else            (encode-mod r f 1 (conj acc (pack cnt prev)))))
+
   ([coll]
-     (encode coll (first coll) 0 [])))
+     (encode-mod coll (first coll) 0 [])))

@@ -9,7 +9,7 @@
   [cnt x]
   (list cnt x))
 
-(defn encode
+(defn encode-mod
   ([[f & r :as coll] prev cnt acc]
      (cond (empty? coll)    (seq (conj acc (pack cnt prev)))
            (= prev f)       (encode-mod r f (inc cnt) acc)

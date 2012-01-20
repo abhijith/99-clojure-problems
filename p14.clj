@@ -4,8 +4,10 @@
 ;; (A A B B C C C C D D)
 
 (defn dupli
-  [[f & r :as coll] acc] 
-  (if (empty? coll)
-    (seq acc)
-    (dupli r (concat acc (repeat 2 f)))))
+  ([[f & r :as coll] acc] 
+     (if (empty? coll)
+       (seq acc)
+       (dupli r (concat acc (repeat 2 f)))))
+  ([coll]
+     (dupli coll [])))
         

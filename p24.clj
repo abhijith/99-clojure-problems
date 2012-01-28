@@ -7,12 +7,13 @@
 ;; Hint: Combine the solutions of problems P22 and P23.
 
 (defn rnd-select
-  ([coll n len cnt acc]
-     (cond (empty? coll) (seq acc)
-           (= n cnt)     (seq acc)
-           :else         (rnd-select coll n len (inc cnt) (conj acc (nth coll (rand-int len))))))
+  ([coll n cnt acc]
+     (let [ i (rand-int (count coll)) ]
+       (cond (= n cnt)          (seq acc)
+             (= (count coll) 1) (seq (conj acc (first coll)))
+             :else              (rnd-select (remove-at coll i) n (inc cnt) (conj acc (nth coll i))))))
   ([coll n]
-     (rnd-select coll n (count coll) 0 [])))
+     (rnd-select coll n 0 [])))
 
 (defn lotto-select
   [n max]

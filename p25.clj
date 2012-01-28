@@ -3,14 +3,19 @@
 ;; * (rnd-permu '(a b c d e f))
 ;; (B A D C E F)
 
-(defn rnd-select
-  ([coll n len cnt acc]
+(defn remove-at
+  ([[f & r :as coll] n cnt acc]
      (cond (empty? coll) (seq acc)
-           (= n cnt)     (seq acc)
-           :else         (rnd-select coll n len (inc cnt) (conj acc (nth coll (rand-int len))))))
+           (= n cnt)     (remove-at r n (inc cnt) acc)
+           :else         (remove-at r n (inc cnt) (conj acc f))))
   ([coll n]
-     (rnd-select coll n (count coll) 0 [])))
+     (remove-at coll n 0 [])))
 
 (defn rnd-permu
-  [coll]
-  (rnd-select coll (count coll)))
+  ([coll acc]
+     (let [ n (rand-int (count coll)) ]
+       (cond (empty? coll)      (seq acc)
+             (= (count coll) 1) (seq (conj acc (first coll)))
+             :else              (rnd-permu (remove-at coll n) (conj acc (nth coll n))))))
+  ([coll]
+     (rnd-permu coll [])))

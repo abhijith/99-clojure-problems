@@ -5,10 +5,13 @@
 ;; * (combination 3 '(a b c d e f))
 ;; ((A B C) (A B D) (A B E) ... )
 
-(defn window [coll n]
-  (when (>= (count coll) n)
-    (concat [(subvec coll 0 n)] (window (into [] (rest coll)) n))))
-
-;; Example
-;; (window [:a :b :c :d :e :f] 4)
-;; ([:a :b :c :d] [:b :c :d :e] [:c :d :e :f])
+(defn combinations
+  ([n coll]
+     (combinations [] n coll))
+  
+  ([acc n coll]
+     (when-not (empty? coll)
+       (let [combination (conj acc (first coll))]
+         (concat (if (= (count combination) n) [combination] nil)
+                 (combinations combination n (rest coll))
+                 (combinations acc n (rest coll)))))))

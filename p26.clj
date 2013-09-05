@@ -12,6 +12,6 @@
   ([coll n acc]
      (when-not (empty? coll)
        (let [combination (conj acc (first coll))]
-         (concat (if (= (count combination) n) [combination] nil)
-                 (combinations combination n (rest coll))
-                 (combinations acc n (rest coll)))))))
+         (concat (if (= (count combination) n) [combination]
+                     (combinations (rest coll) n combination))
+                 (combinations (rest coll) n acc))))))

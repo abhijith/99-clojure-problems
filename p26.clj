@@ -6,10 +6,10 @@
 ;; ((A B C) (A B D) (A B E) ... )
 
 (defn combinations
-  ([n coll]
-     (combinations [] n coll))
+  ([coll n]
+     (combinations coll n []))
   
-  ([acc n coll]
+  ([coll n acc]
      (when-not (empty? coll)
        (let [combination (conj acc (first coll))]
          (concat (if (= (count combination) n) [combination] nil)

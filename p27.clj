@@ -26,8 +26,8 @@
      (let [n       (first gs)
            comb    (conj acc (first xs))
            ng-coll (into [] (sort (difference (set coll) (set comb))))]
-       (cond (or (nil? xs) (empty? xs)) (when (= (count gacc) n-gs) (list gacc))
-             (or (nil? gs) (empty? gs)) (when (= (count gacc) n-gs) (list gacc))
+       (cond (empty? xs) (when (= (count gacc) n-gs) (list gacc))
+             (empty? gs) (when (= (count gacc) n-gs) (list gacc))
              :else   (concat (if (= (count comb) n)
                                (groupn ng-coll ng-coll (rest gs) n-gs [] (conj gacc comb))
                                (groupn coll (rest xs) gs n-gs comb gacc))

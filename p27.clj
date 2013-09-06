@@ -22,13 +22,13 @@
 (defn groupn
   ([coll gs]
      (groupn coll coll gs (count gs) [] []))
-  ([coll xs gs n-gs acc gacc]
+  ([coll xs gs num-groups comb-acc group-acc]
      (let [n       (first gs)
-           comb    (conj acc (first xs))
+           comb    (conj comb-acc (first xs))
            ng-coll (into [] (sort (difference (set coll) (set comb))))]
-       (cond (empty? xs) (when (= (count gacc) n-gs) (list gacc))
-             (empty? gs) (when (= (count gacc) n-gs) (list gacc))
+       (cond (empty? xs) (when (= (count group-acc) num-groups) (list group-acc))
+             (empty? gs) (when (= (count group-acc) num-groups) (list group-acc))
              :else   (concat (if (= (count comb) n)
-                               (groupn ng-coll ng-coll (rest gs) n-gs [] (conj gacc comb))
-                               (groupn coll (rest xs) gs n-gs comb gacc))
-                             (groupn coll (rest xs) gs n-gs acc gacc))))))
+                               (groupn ng-coll ng-coll (rest gs) num-groups [] (conj group-acc comb))
+                               (groupn coll (rest xs) gs num-groups comb group-acc))
+                             (groupn coll (rest xs) gs num-groups comb-acc group-acc))))))

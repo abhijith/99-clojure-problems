@@ -38,4 +38,3 @@
 (defn lfsort [coll]
   (let [freqs (length-freqs coll)]
     (sorter coll (fn [a b] (> (freqs (count a)) (freqs (count b)))))))
-

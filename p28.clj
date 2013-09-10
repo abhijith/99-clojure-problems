@@ -14,7 +14,7 @@
 ;; Note that in the above example, the first two lists in the result have length 4 and 1, both lengths appear just once. The third and forth list have length 3 which appears twice (there are two list of this length). And finally, the last three lists have length 2. This is the most frequent length.
 
 (defn sorter
-  ([coll lambda]
+  ([coll lambda f]
      (sorter coll lambda (count coll) 1 [] []))
   ([coll lambda n i xs sorted]
      (if-not (> i n)
@@ -31,15 +31,11 @@
   ([coll] (length-freqs coll {}))
   ([coll acc]
      (if (empty? coll)
-       (vals acc)
+       acc
        (let [[f & r] coll n (count f)]
-         (length-freqs r (update-in acc [n] (fn [[freq lst :as old] x]
-                                              (if (nil? old)
-                                                [1 [x]]
-                                                [(inc freq) (conj lst x)]))
-                                    f))))))
+         (length-freqs r (update-in acc [n] #(if (nil? %1) 1 (inc %1))))))))
 
 (defn lfsort [coll]
-  (let [sorted (sorter (length-freqs coll) (fn [[freq-a a] [freq-b b]] (> freq-a freq-b)))]
-    sorted))
+  (let [freqs (length-freqs coll)]
+    (sorter coll (fn [a b] (> (freqs (count a)) (freqs (count b)))))))
 

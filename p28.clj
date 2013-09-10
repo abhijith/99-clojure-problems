@@ -26,3 +26,20 @@
 
 (defn lsort [coll]
   (sorter coll (fn [a b] (> (count a) (count b)))))
+
+(defn length-freqs
+  ([coll] (length-freqs coll {}))
+  ([coll acc]
+     (if (empty? coll)
+       (vals acc)
+       (let [[f & r] coll n (count f)]
+         (length-freqs r (update-in acc [n] (fn [[freq lst :as old] x]
+                                              (if (nil? old)
+                                                [1 [x]]
+                                                [(inc freq) (conj lst x)]))
+                                    f))))))
+
+(defn lfsort [coll]
+  (let [sorted (sorter (length-freqs coll) (fn [[freq-a a] [freq-b b]] (> freq-a freq-b)))]
+    sorted))
+

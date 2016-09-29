@@ -29,19 +29,20 @@
 (leaf? (get-in t1 [2 1 1])) ; true
 
 (defn traverse [tree level depth acc]
-  (let [[elem left right] tree]
+  (let [[elem left right] tree d (inc depth)]
     (if (node? tree)
       (when-not (leaf? tree)
         (do
           (println elem)
           (when (= level depth)
             (reset! acc (conj @acc elem)))
-          (traverse left  level (inc depth) acc)
-          (traverse right level (inc depth) acc))))
+          (when-not (> d level)
+            (traverse left  level d acc)
+            (traverse right level d acc)))))
     (deref acc)))
 
 (defn collect-internal [tree level]
   (traverse tree level 1 (atom [])))
 
 (collect-internal t1 1) ; [:a :b :c :d]
-(collect-internal t2 3) ; [:a :b :c :d e]
+(collect-internal t2 2) ; [:a :b :c :d e]
